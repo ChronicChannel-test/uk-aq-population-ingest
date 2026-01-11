@@ -1,0 +1,30 @@
+{
+  "column_candidates": {
+    "geo_code": [
+      "area code",
+      "code",
+      "geography code",
+      "area_code",
+      "gss code"
+    ],
+    "time": [
+      "year",
+      "date",
+      "time",
+      "reference_date"
+    ],
+    "value": [
+      "population",
+      "value",
+      "all persons",
+      "all people",
+      "total"
+    ],
+    "measure": [
+      "measure",
+      "sex",
+      "age"
+    ]
+  },
+  "overrides": []
+}

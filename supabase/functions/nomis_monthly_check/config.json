@@ -1,0 +1,4 @@
+{
+  "verify_jwt": false,
+  "schedule": "0 2 1 * *"
+}

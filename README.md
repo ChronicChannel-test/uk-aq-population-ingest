@@ -1,10 +1,10 @@
-# nomis-api
+# uk-population-ingest
 
-A lightweight ingestion tool for Nomis population datasets, storing outputs in Supabase with `nomis_`-prefixed tables.
+Lightweight ingestion tools for UK population datasets across Nomis, NRS, and NISRA, storing outputs in Supabase with source-prefixed tables.
 
 ## Quick start
 
-1. Create tables in Supabase using `sql/nomis_schema.sql`.
+1. Create tables in Supabase using `sql/uk_population_schema.sql`.
 2. Set environment variables:
    - `NOMIS_BASE_URL` (default: `https://www.nomisweb.co.uk/api/v01`)
    - `NOMIS_USER` (optional)
