@@ -29,11 +29,30 @@ jobs:
             NOMIS_BASE_URL=${{ secrets.NOMIS_BASE_URL }} \
             NOMIS_USER=${{ secrets.NOMIS_USER }} \
             NOMIS_API_KEY=${{ secrets.NOMIS_API_KEY }} \
-            NOMIS_DATASET_IDS=${{ secrets.NOMIS_DATASET_IDS }}
+            NOMIS_DATASET_IDS=${{ secrets.NOMIS_DATASET_IDS }} \
+            UK_POPULATION_CATALOGUE_URL=${{ secrets.UK_POPULATION_CATALOGUE_URL }} \
+            UK_POPULATION_INGEST_CONFIG_URL=${{ secrets.UK_POPULATION_INGEST_CONFIG_URL }} \
+            UK_POPULATION_INGEST_CONFIG=${{ secrets.UK_POPULATION_INGEST_CONFIG }} \
+            UK_POPULATION_PREFIXES=${{ secrets.UK_POPULATION_PREFIXES }} \
+            UK_POPULATION_BATCH_SIZE=${{ secrets.UK_POPULATION_BATCH_SIZE }}
 
       - name: Deploy nomis_monthly_check
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: |
           supabase functions deploy nomis_monthly_check \
+            --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: Deploy uk_population_catalogue_load
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase functions deploy uk_population_catalogue_load \
+            --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
+
+      - name: Deploy uk_population_external_ingest
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          supabase functions deploy uk_population_external_ingest \
             --project-ref ${{ secrets.SUPABASE_PROJECT_REF }}
