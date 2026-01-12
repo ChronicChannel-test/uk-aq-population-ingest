@@ -11,7 +11,14 @@ Example entry:
   "geo_code_column": "GEOGRAPHY_CODE",
   "time_column": "DATE",
   "value_column": "OBS_VALUE",
-  "measure_column": "MEASURES"
+  "measure_column": "MEASURES",
+  "params": {
+    "geography": "TYPE150",
+    "gender": "0",
+    "age": "0",
+    "date": "latest",
+    "measures": "20100"
+  }
 }
 ```
 
@@ -22,3 +29,4 @@ Fields:
 - `time_column`: Column name for the time value (YYYY or YYYY-MM-DD)
 - `value_column`: Column name with the population value
 - `measure_column`: Optional column name for the measure
+- `params`: Optional Nomis query params (use to pin geography/age/sex/date filters)

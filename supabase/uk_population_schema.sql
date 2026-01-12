@@ -210,3 +210,46 @@ alter table nisra_dataset_registry enable row level security;
 alter table nisra_ingest_runs enable row level security;
 alter table nisra_ingest_checkpoints enable row level security;
 alter table nisra_geography_catalogue enable row level security;
+
+create or replace view nomis_population_current_observations as
+select distinct on (geo_type, geo_code, dataset_id)
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nomis_population_observations
+order by geo_type, geo_code, dataset_id, reference_date desc;
+
+create or replace view nomis_population_pcon_2010 as
+select
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nomis_population_observations
+where geo_type = 'PCON'
+  and dataset_id = 'NM_2010_1'
+  and reference_date between date '2011-06-30' and date '2020-06-30';
+
+create or replace view nomis_population_pcon_2024 as
+select
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nomis_population_observations
+where geo_type = 'PCON'
+  and dataset_id = 'NM_2014_1'
+  and reference_date between date '2021-06-30' and date '2024-06-30';

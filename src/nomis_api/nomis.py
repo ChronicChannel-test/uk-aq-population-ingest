@@ -49,14 +49,44 @@ class NomisClient:
         return payload.get("geographies", [])
 
     def fetch_dataset_rows(self, dataset_id: str, params: dict) -> Iterable[dict]:
+        url = f"{self.base_url}/dataset/{dataset_id}.csv"
         base_params = dict(params)
-        base_params.setdefault("format", "csv")
         if self.user:
             base_params.setdefault("uid", self.user)
         if self.api_key:
             base_params.setdefault("apikey", self.api_key)
-        url = f"{self.base_url}/dataset/{dataset_id}.csv"
+
         response = requests.get(url, params=base_params, timeout=300)
         response.raise_for_status()
+
+        used_credentials = "uid" in base_params or "apikey" in base_params
+        used_format = "format" in base_params
+        if (used_credentials or used_format) and self._should_retry_anonymous(response):
+            fallback_params = dict(params)
+            fallback_params.pop("uid", None)
+            fallback_params.pop("apikey", None)
+            fallback_params.pop("format", None)
+            response = requests.get(url, params=fallback_params, timeout=300)
+            response.raise_for_status()
+
+        if self._looks_like_html(response):
+            raise RuntimeError(f"Nomis API returned HTML for dataset {dataset_id}. Check dataset ID/params.")
+        if not response.text.strip():
+            raise RuntimeError(f"Nomis API returned an empty CSV for dataset {dataset_id}.")
+
         reader = csv.DictReader(io.StringIO(response.text))
         return list(reader)
+
+    @staticmethod
+    def _looks_like_html(response: requests.Response) -> bool:
+        content_type = (response.headers.get("content-type") or "").lower()
+        if "text/html" in content_type:
+            return True
+        text = response.text.lstrip().lower()
+        return text.startswith("<!doctype html") or text.startswith("<html")
+
+    @classmethod
+    def _should_retry_anonymous(cls, response: requests.Response) -> bool:
+        if cls._looks_like_html(response):
+            return True
+        return not response.text.strip()

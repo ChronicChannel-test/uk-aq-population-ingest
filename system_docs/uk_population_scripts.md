@@ -4,8 +4,7 @@ This document summarizes the helper scripts in this repo and the scripts planned
 
 ## Environment
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_KEY` (service role key required for ingestion)
-  - If you store the key as `SUPABASE_SERVICE_ROLE_KEY`, export it as `SUPABASE_SERVICE_KEY` for the scripts.
+- `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SERVICE_KEY` (service role key required for ingestion)
 
 Nomis-specific:
 - `NOMIS_BASE_URL` (optional; defaults to `https://www.nomisweb.co.uk/api/v01`)
@@ -30,6 +29,17 @@ python3 scripts/nomis_discover.py --output data/nomis_dataset_registry.json
 
 Outputs:
 - `data/nomis_dataset_registry.json` by default (or the path passed to `--output`).
+
+### `scripts/nomis_auth_check.py`
+Purpose:
+- Compare anonymous vs credentialed responses for a Nomis dataset.
+- Spot empty/HTML responses when `NOMIS_USER`/`NOMIS_API_KEY` are set.
+
+Common commands:
+```
+python3 scripts/nomis_auth_check.py
+python3 scripts/nomis_auth_check.py --config data/nomis_population_config.json
+```
 
 ### `scripts/nomis_ingest.py`
 Purpose:

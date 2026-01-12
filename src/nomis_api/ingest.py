@@ -17,6 +17,7 @@ class DatasetIngestConfig:
     time_column: str
     value_column: str
     measure_column: str | None = None
+    params: dict[str, str] | None = None
 
 
 def parse_reference_date(value: str) -> date:
@@ -60,10 +61,10 @@ def ingest_population_dataset(
     config: DatasetIngestConfig,
     table: str,
 ) -> int:
-    rows = nomis_client.fetch_dataset_rows(
-        config.dataset_id,
-        params={"geography": config.geo_type},
-    )
+    request_params = {"geography": config.geo_type}
+    if config.params:
+        request_params.update(config.params)
+    rows = nomis_client.fetch_dataset_rows(config.dataset_id, params=request_params)
     mapped = map_rows(rows, config)
     if mapped:
         supabase_client.upsert(

@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "dataset_id": "NM_2010_1",
+    "geo_type": "PCON",
+    "geo_code_column": "GEOGRAPHY_CODE",
+    "time_column": "DATE",
+    "value_column": "OBS_VALUE",
+    "measure_column": "MEASURES",
+    "params": {
+      "geography": "TYPE460",
+      "gender": "0",
+      "c_age": "200",
+      "freq": "A",
+      "date": "2011-2020",
+      "measures": "20100"
+    }
+  },
+  {
+    "dataset_id": "NM_2014_1",
+    "geo_type": "PCON",
+    "geo_code_column": "GEOGRAPHY_CODE",
+    "time_column": "DATE",
+    "value_column": "OBS_VALUE",
+    "measure_column": "MEASURES",
+    "params": {
+      "geography": "TYPE172",
+      "gender": "0",
+      "c_age": "200",
+      "freq": "A",
+      "date": "2021-2024",
+      "measures": "20100"
+    }
+  }
+]
