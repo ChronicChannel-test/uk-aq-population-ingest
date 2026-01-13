@@ -260,34 +260,28 @@ where geo_type = 'PCON'
 create or replace view uk_population_observations
 with (security_invoker = true) as
 select
-  id,
-  geo_type,
   geo_code,
+  geo_type,
   reference_date,
   population_value,
   dataset_id,
-  measure,
-  created_at
+  measure
 from nomis_population_observations
 union all
 select
-  id,
-  geo_type,
   geo_code,
+  geo_type,
   reference_date,
   population_value,
   dataset_id,
-  measure,
-  created_at
+  measure
 from nrs_population_observations
 union all
 select
-  id,
-  geo_type,
   geo_code,
+  geo_type,
   reference_date,
   population_value,
   dataset_id,
-  measure,
-  created_at
+  measure
 from nisra_population_observations;
