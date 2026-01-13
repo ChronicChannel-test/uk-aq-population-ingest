@@ -211,7 +211,8 @@ alter table nisra_ingest_runs enable row level security;
 alter table nisra_ingest_checkpoints enable row level security;
 alter table nisra_geography_catalogue enable row level security;
 
-create or replace view nomis_population_current_observations as
+create or replace view nomis_population_current_observations
+with (security_invoker = true) as
 select distinct on (geo_type, geo_code, dataset_id)
   id,
   geo_type,
@@ -224,7 +225,8 @@ select distinct on (geo_type, geo_code, dataset_id)
 from nomis_population_observations
 order by geo_type, geo_code, dataset_id, reference_date desc;
 
-create or replace view nomis_population_pcon_2010 as
+create or replace view nomis_population_pcon_2010
+with (security_invoker = true) as
 select
   id,
   geo_type,
@@ -239,7 +241,8 @@ where geo_type = 'PCON'
   and dataset_id = 'NM_2010_1'
   and reference_date between date '2011-06-30' and date '2020-06-30';
 
-create or replace view nomis_population_pcon_2024 as
+create or replace view nomis_population_pcon_2024
+with (security_invoker = true) as
 select
   id,
   geo_type,
@@ -253,3 +256,38 @@ from nomis_population_observations
 where geo_type = 'PCON'
   and dataset_id = 'NM_2014_1'
   and reference_date between date '2021-06-30' and date '2024-06-30';
+
+create or replace view uk_population_observations
+with (security_invoker = true) as
+select
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nomis_population_observations
+union all
+select
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nrs_population_observations
+union all
+select
+  id,
+  geo_type,
+  geo_code,
+  reference_date,
+  population_value,
+  dataset_id,
+  measure,
+  created_at
+from nisra_population_observations;
