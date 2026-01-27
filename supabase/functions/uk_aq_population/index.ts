@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Deployment touchpoint: change triggers edge deploy workflow. MJH 2026-01-27
+// Deployment touchpoint: change triggers edge deploy workflow. MJH 2026-01-27 v2
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 const DEFAULT_LIMIT = 2000;
