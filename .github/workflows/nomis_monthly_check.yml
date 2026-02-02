@@ -3,7 +3,7 @@ name: Nomis monthly check
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 6 1 * *"
+    - cron: "0 6 3 * *"
 
 jobs:
   check:
