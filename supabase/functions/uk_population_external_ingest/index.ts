@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import "../_shared/fetch_egress_patch.ts";
 
 import {
   buildDatasetId,
@@ -19,6 +20,8 @@ type IngestConfig = {
   column_candidates: Record<string, string[]>;
   overrides: IngestOverride[];
 };
+
+type SupabaseClientLike = ReturnType<typeof createClient<any, "public", any>>;
 
 const jsonHeaders = {
   "content-type": "application/json; charset=utf-8",
@@ -73,10 +76,10 @@ const buildOverrideMap = (overrides: IngestOverride[]) => {
 };
 
 const startIngestRun = async (
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClientLike,
   table: string,
   datasetId: string,
-) => {
+): Promise<number | null> => {
   const { data, error } = await supabase
     .from(table)
     .insert({ status: "running", row_count: 0, notes: `dataset_id=${datasetId}` })
@@ -84,11 +87,13 @@ const startIngestRun = async (
   if (error) {
     throw new Error(error.message);
   }
-  return data?.[0]?.id ?? null;
+  const rawId = data?.[0]?.id;
+  const parsedId = Number(rawId);
+  return Number.isFinite(parsedId) ? parsedId : null;
 };
 
 const completeIngestRun = async (
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClientLike,
   table: string,
   runId: number | null,
   status: string,
@@ -111,7 +116,7 @@ const completeIngestRun = async (
 };
 
 const upsertInChunks = async (
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClientLike,
   table: string,
   rows: Record<string, unknown>[],
   onConflict: string,
@@ -129,7 +134,7 @@ const upsertInChunks = async (
 };
 
 const ingestEntry = async (
-  supabase: ReturnType<typeof createClient>,
+  supabase: SupabaseClientLike,
   prefix: string,
   entry: CatalogueEntry,
   config: IngestConfig,

@@ -1,10 +1,19 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import "../_shared/fetch_egress_patch.ts";
 
 type NomisDataset = {
   dataset_id: string;
   title: string;
   description?: string | null;
+};
+
+type RegistryEntry = {
+  dataset_id: string;
+  title: string;
+  description: string | null;
+  geo_types: string[];
+  is_population: boolean;
 };
 
 const POPULATION_REGEX = /population/i;
@@ -92,7 +101,7 @@ const mapWithLimit = async <T, R>(
   return results;
 };
 
-const discoverPopulationDatasets = async (baseUrl: string) => {
+const discoverPopulationDatasets = async (baseUrl: string): Promise<RegistryEntry[]> => {
   const datasets = await listDatasets(baseUrl);
   const populationDatasets = datasets.filter((dataset) => {
     if (POPULATION_REGEX.test(dataset.title)) {
@@ -116,7 +125,7 @@ const discoverPopulationDatasets = async (baseUrl: string) => {
     };
   });
 
-  return entries.filter((entry) => entry !== null);
+  return entries.filter((entry): entry is RegistryEntry => entry !== null);
 };
 
 serve(async (req) => {
@@ -151,10 +160,7 @@ serve(async (req) => {
       (existingResponse.data ?? []).map((row) => row.dataset_id as string),
     );
 
-    const discovered = await discoverPopulationDatasets(baseUrl);
-    const registryEntries = discovered.filter((entry): entry is Record<string, unknown> =>
-      Boolean(entry),
-    );
+    const registryEntries = await discoverPopulationDatasets(baseUrl);
 
     const now = new Date().toISOString();
     const upsertPayload = registryEntries.map((entry) => ({

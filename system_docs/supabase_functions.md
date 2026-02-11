@@ -2,6 +2,12 @@
 
 - Deployment: see [.github/workflows/supabase_edge_deploy.yml](.github/workflows/supabase_edge_deploy.yml) for automated deploys of all functions in supabase/functions/.
 - Runtime: all functions use Deno with supabase-js v2.45.4.
+- Global instrumentation: all function entrypoints import [supabase/functions/_shared/fetch_egress_patch.ts](supabase/functions/_shared/fetch_egress_patch.ts), which captures same-project `/rest/v1/*` responses and writes metrics through `uk_aq_record_endpoint_metric`.
+- Egress capture env toggles:
+  - `UK_AQ_POSTGREST_EGRESS_CAPTURE_ENABLED` (default `true`)
+  - `UK_AQ_POSTGREST_EGRESS_CAPTURE_SAMPLE_RATE` (default `1`)
+  - `UK_AQ_EGRESS_METRICS_DB_ENABLED` (default `true`)
+  - `UK_AQ_EGRESS_LOG_SAMPLE_RATE` (default `0.2`, used by non-forced metric logging paths)
 
 ## Function summaries
 
