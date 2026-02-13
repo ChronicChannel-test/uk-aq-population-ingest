@@ -107,3 +107,6 @@ Files changed (paths)
 Implementation details (short, specific)
 Supabase steps (instructions only,)
 Verification checklist (clear pass/fail)
+
+Planning requirement:
+- Any plan should explicitly cover egress and database-size impact. For each option, call out those tradeoffs in pros/cons, and base the recommendation on that analysis.
