@@ -10,7 +10,7 @@ Lightweight ingestion tools for UK population datasets across Nomis, NRS, and NI
    - `NOMIS_USER` (optional)
    - `NOMIS_API_KEY` (optional)
    - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SERVICE_KEY`
+   - `SB_SECRET_KEY`
 3. Discover population datasets:
    ```bash
    python scripts/nomis_discover.py

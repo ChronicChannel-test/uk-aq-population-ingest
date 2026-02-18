@@ -22,12 +22,12 @@ serve(async (req) => {
   try {
     const supabaseUrl = getEnv("SUPABASE_URL");
     const supabaseServiceKey =
-      getEnv("SUPABASE_SERVICE_ROLE_KEY") ?? getEnv("SUPABASE_SERVICE_KEY");
+      getEnv("SB_SECRET_KEY");
     if (!supabaseUrl || !supabaseServiceKey) {
       return new Response(
         JSON.stringify({
           error:
-            "Missing SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/SUPABASE_SERVICE_KEY.",
+            "Missing SUPABASE_URL and SB_SECRET_KEY.",
         }),
         { status: 500, headers: jsonHeaders },
       );

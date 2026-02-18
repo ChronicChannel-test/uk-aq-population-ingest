@@ -12,11 +12,11 @@ jobs:
       - name: Call edge function
         env:
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SB_SECRET_KEY: ${{ secrets.SB_SECRET_KEY }}
         run: |
           curl --fail --show-error --silent \
             -X POST \
             "https://${SUPABASE_PROJECT_REF}.functions.supabase.co/nomis_monthly_check" \
-            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "apikey: ${SB_SECRET_KEY}" \
             -H "Content-Type: application/json" \
             -d "{}"

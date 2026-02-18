@@ -24,7 +24,7 @@ def main() -> None:
 
     settings = get_settings()
     if not settings.supabase_url or not settings.supabase_service_key:
-        raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/SUPABASE_SERVICE_KEY are required")
+        raise RuntimeError("SUPABASE_URL and SB_SECRET_KEY are required")
 
     nomis_client = NomisClient(settings.nomis_base_url, settings.nomis_user, settings.nomis_api_key)
     supabase_client = SupabaseClient(settings.supabase_url, settings.supabase_service_key)

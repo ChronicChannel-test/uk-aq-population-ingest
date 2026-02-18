@@ -29,8 +29,7 @@ type MetricPayload = {
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ??
   Deno.env.get("SB_SUPABASE_URL") ??
   "";
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
-  Deno.env.get("SB_SERVICE_ROLE_KEY") ??
+const SB_SECRET_KEY = Deno.env.get("SB_SECRET_KEY") ??
   "";
 const UK_AQ_PUBLIC_SCHEMA = Deno.env.get("UK_AQ_PUBLIC_SCHEMA") ??
   "uk_aq_public";
@@ -162,7 +161,7 @@ function shouldDisableDbWrites(message: string): boolean {
   return normalized.includes("could not find the function") ||
     normalized.includes("relation") && normalized.includes("does not exist") ||
     normalized.includes("missing supabase_url") ||
-    normalized.includes("missing supabase_service_role_key");
+    normalized.includes("missing sb_secret_key");
 }
 
 function warnDb(message: string, context: Record<string, unknown> = {}): void {
@@ -183,8 +182,7 @@ function postgrestHeaders(
   schema = UK_AQ_PUBLIC_SCHEMA,
 ): Record<string, string> {
   const headers: Record<string, string> = {
-    apikey: SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: SB_SECRET_KEY,
     "Content-Type": "application/json",
     [EGRESS_BYPASS_HEADER]: "1",
   };
@@ -198,10 +196,10 @@ function postgrestHeaders(
 async function postgrestRpc(fn: string, args: Record<string, unknown>): Promise<
   { ok: boolean; message?: string }
 > {
-  if (!REST_BASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  if (!REST_BASE_URL || !SB_SECRET_KEY) {
     return {
       ok: false,
-      message: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.",
+      message: "Missing SUPABASE_URL or SB_SECRET_KEY.",
     };
   }
   const url = `${REST_BASE_URL}/rpc/${fn}`;

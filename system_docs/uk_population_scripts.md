@@ -4,7 +4,7 @@ This document summarizes the helper scripts in this repo and the scripts planned
 
 ## Environment
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SERVICE_KEY` (service role key required for ingestion)
+- `SB_SECRET_KEY` (secret key required for ingestion)
 
 Nomis-specific:
 - `NOMIS_BASE_URL` (optional; defaults to `https://www.nomisweb.co.uk/api/v01`)

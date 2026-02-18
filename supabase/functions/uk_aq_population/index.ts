@@ -10,8 +10,7 @@ const POPULATION_VIEW = "uk_population_observations";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")
   ?? Deno.env.get("SB_SUPABASE_URL")
   ?? "";
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")
-  ?? Deno.env.get("SB_SERVICE_ROLE_KEY")
+const SB_SECRET_KEY = Deno.env.get("SB_SECRET_KEY")
   ?? "";
 
 const CORS_HEADERS = {
@@ -26,8 +25,7 @@ const REST_BASE_URL = SUPABASE_URL
 
 function postgrestHeaders(): Record<string, string> {
   return {
-    apikey: SUPABASE_SERVICE_ROLE_KEY,
-    Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    apikey: SB_SECRET_KEY,
     "Content-Type": "application/json",
   };
 }
@@ -37,8 +35,8 @@ async function postgrestRequest<T>(
   table: string,
   params?: Record<string, string>,
 ): Promise<{ data: T | null; error: { message: string } | null }> {
-  if (!REST_BASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    return { data: null, error: { message: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY." } };
+  if (!REST_BASE_URL || !SB_SECRET_KEY) {
+    return { data: null, error: { message: "Missing SUPABASE_URL or SB_SECRET_KEY." } };
   }
   const url = new URL(`${REST_BASE_URL}/${table}`);
   for (const [key, value] of Object.entries(params ?? {})) {
@@ -66,8 +64,8 @@ serve(async (req) => {
   if (req.method !== "GET") {
     return new Response("Method not allowed", { status: 405, headers: CORS_HEADERS });
   }
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    return json({ error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY." }, 500);
+  if (!SUPABASE_URL || !SB_SECRET_KEY) {
+    return json({ error: "Missing SUPABASE_URL or SB_SECRET_KEY." }, 500);
   }
 
   const url = new URL(req.url);

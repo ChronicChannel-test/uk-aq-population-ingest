@@ -17,5 +17,5 @@ def get_settings() -> Settings:
         nomis_user=os.getenv("NOMIS_USER"),
         nomis_api_key=os.getenv("NOMIS_API_KEY"),
         supabase_url=os.getenv("SUPABASE_URL"),
-        supabase_service_key=os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY"),
+        supabase_service_key=os.getenv("SB_SECRET_KEY"),
     )

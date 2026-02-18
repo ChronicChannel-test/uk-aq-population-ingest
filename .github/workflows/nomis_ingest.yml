@@ -36,6 +36,6 @@ jobs:
           NOMIS_USER: ${{ secrets.NOMIS_USER }}
           NOMIS_API_KEY: ${{ secrets.NOMIS_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SB_SECRET_KEY: ${{ secrets.SB_SECRET_KEY }}
         run: |
           python scripts/nomis_ingest.py

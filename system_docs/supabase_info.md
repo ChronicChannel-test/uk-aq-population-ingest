@@ -4,14 +4,13 @@ Use these exact secret names in GitHub and local environments:
 
 - `SUPABASE_URL`
 - `SUPABASE_PROJECT_REF`
-- `SUPABASE_PUBLISHABLE_DEFAULT_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SB_PUBLISHABLE_DEFAULT_KEY`
+- `SB_SECRET_KEY`
 - `SUPABASE_ACCESS_TOKEN`
-- `SUPABASE_ANON_JWT`
 
 ## Rotation steps
 
-1. Supabase Dashboard -> Settings -> API -> regenerate anon and service role keys.
+1. Supabase Dashboard -> Settings -> API -> rotate API keys (publishable/secret as needed).
 2. Supabase Dashboard -> Account Settings -> Access Tokens -> revoke and create a new token.
 3. Update your environment variables and GitHub Actions secrets with the new values.
 
@@ -22,7 +21,7 @@ Required for `.github/workflows/supabase_edge_deploy.yml`:
 - `SUPABASE_ACCESS_TOKEN`
 - `SUPABASE_PROJECT_REF`
 - `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
+- `SB_SECRET_KEY`
 
 Optional (passed through to the function):
 
