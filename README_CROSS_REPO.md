@@ -23,12 +23,12 @@ It depends on schema definitions in the schema repo and shares conventions with 
 - **Schema repo**: `CIC-test-uk-aq-schema` defines all population tables/views used here.
 - **AQ ingest repo**: `CIC-test-uk-aq-ingest` owns the main air-quality ingest and most Edge Functions; this repo provides the population Edge Function consumed by the UI.
 - **History repo**: `CIC-test-uk-aq-history` is for long-run/backfill analysis and uses the same schemas (confirm).
-- **Webpage repo**: `CIC-test-uk-aq` reads population data via the `uk_aq_population` Edge Function in this repo.
+- **Webpage repo**: `CIC-test-uk-aq-webpage` reads population data via the `uk_aq_population` Edge Function in this repo.
 
 Data flow across repos:
 - `CIC-test-uk-aq-schema` defines tables/views/RPC/policies.
 - `CIC-test-uk-aq-ingest`, `CIC-test-uk-aq-history`, and this repo write data into those schemas.
-- `CIC-test-uk-aq` reads data and calls Edge Functions.
+- `CIC-test-uk-aq-webpage` reads data and calls Edge Functions.
 - Edge Functions (if present) live under `/supabase` in the ingest repo; this repo also ships Edge Functions under its own `/supabase` directory.
 
 ## Supabase touchpoints
@@ -49,7 +49,7 @@ Data flow across repos:
   - [supabase/functions/uk_population_catalogue_load/index.ts](supabase/functions/uk_population_catalogue_load/index.ts): deletes/inserts `*_geography_catalogue`.
   - [supabase/functions/nomis_monthly_check/index.ts](supabase/functions/nomis_monthly_check/index.ts): upserts `nomis_dataset_registry`.
 - **Schema links**: see `uk_aq_pop_schema.sql` in the schema repo for all population tables/views.
-  - [../../CIC-test-uk-aq-schema/uk-aq-schema/schemas/uk_aq_pop_schema.sql](../../CIC-test-uk-aq-schema/uk-aq-schema/schemas/uk_aq_pop_schema.sql)
+  - [../../CIC-Test-UK-AQ-Schema/CIC-test-uk-aq-schema/schemas/ingest_db/uk_aq_pop_schema.sql](../../CIC-Test-UK-AQ-Schema/CIC-test-uk-aq-schema/schemas/ingest_db/uk_aq_pop_schema.sql)
 
 ### Edge Functions (if applicable)
 - **Location**: [supabase/functions/](supabase/functions/)
@@ -80,7 +80,7 @@ Data flow across repos:
 
 ## Data model pointers
 - Population tables + views (`nomis_*`, `nrs_*`, `nisra_*`, `uk_population_observations`):
-  - [../../CIC-test-uk-aq-schema/uk-aq-schema/schemas/uk_aq_pop_schema.sql](../../CIC-test-uk-aq-schema/uk-aq-schema/schemas/uk_aq_pop_schema.sql)
+  - [../../CIC-Test-UK-AQ-Schema/CIC-test-uk-aq-schema/schemas/ingest_db/uk_aq_pop_schema.sql](../../CIC-Test-UK-AQ-Schema/CIC-test-uk-aq-schema/schemas/ingest_db/uk_aq_pop_schema.sql)
 
 ## Egress-relevant notes (FACTUAL, no solutions)
 - [supabase/functions/uk_aq_population/index.ts](supabase/functions/uk_aq_population/index.ts) serves up to `limit=20000` rows from `uk_population_observations`.
