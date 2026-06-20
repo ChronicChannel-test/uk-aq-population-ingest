@@ -1,7 +1,7 @@
 # Cross-repo map: CIC-Test-uk-population-ingest
 
 ## Main repo
-- `CIC-test-uk-aq-ingest` is the main repo for this project and the default starting point for cross-repo tasks.
+- `CIC-test-uk-aq-ops` is the main repo for this project and the default starting point for cross-repo tasks.
 
 ## Purpose
 This repo contains Python scripts and Supabase Edge Functions that ingest UK population datasets from Nomis, NRS, and NISRA into source-prefixed tables in Supabase. It also exposes a read-only population endpoint used by the UI for population overlays.
