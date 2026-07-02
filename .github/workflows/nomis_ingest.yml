@@ -22,6 +22,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install local package
+        run: pip install -e .
+
       - name: Discover datasets
         env:
           NOMIS_BASE_URL: ${{ secrets.NOMIS_BASE_URL }}

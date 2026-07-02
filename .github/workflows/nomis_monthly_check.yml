@@ -12,6 +12,7 @@ jobs:
       - name: Call edge function
         env:
           SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SB_SECRET_KEY: ${{ secrets.SB_SECRET_KEY }}
         run: |
           curl --fail --show-error --silent \
