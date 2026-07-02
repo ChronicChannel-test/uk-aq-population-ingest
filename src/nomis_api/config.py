@@ -13,7 +13,7 @@ class Settings:
 
 def get_settings() -> Settings:
     return Settings(
-        nomis_base_url=os.getenv("NOMIS_BASE_URL", "https://www.nomisweb.co.uk/api/v01"),
+        nomis_base_url=os.getenv("NOMIS_BASE_URL") or "https://www.nomisweb.co.uk/api/v01",
         nomis_user=os.getenv("NOMIS_USER"),
         nomis_api_key=os.getenv("NOMIS_API_KEY"),
         supabase_url=os.getenv("SUPABASE_URL"),
