@@ -19,10 +19,20 @@ class NomisClient:
         self.user = user
         self.api_key = api_key
 
+    def _get_auth_params(self) -> dict:
+        params = {}
+        if self.user:
+            params["uid"] = self.user
+        if self.api_key:
+            params["apikey"] = self.api_key
+        return params
+
     def list_datasets(self) -> list[NomisDataset]:
         url = f"{self.base_url}/dataset.json"
-        response = requests.get(url, timeout=60)
+        response = requests.get(url, params=self._get_auth_params(), timeout=60)
         response.raise_for_status()
+        if self._looks_like_html(response):
+            raise RuntimeError(f"Nomis API returned HTML for {url}. Check authentication.")
         payload = response.json()
         datasets = []
         for entry in payload.get("datasets", []):
@@ -37,24 +47,24 @@ class NomisClient:
 
     def get_dataset_metadata(self, dataset_id: str) -> dict:
         url = f"{self.base_url}/dataset/{dataset_id}.json"
-        response = requests.get(url, timeout=60)
+        response = requests.get(url, params=self._get_auth_params(), timeout=60)
         response.raise_for_status()
+        if self._looks_like_html(response):
+            raise RuntimeError(f"Nomis API returned HTML for {url}. Check authentication.")
         return response.json()
 
     def get_geography_codelist(self, dataset_id: str) -> list[dict]:
         url = f"{self.base_url}/dataset/{dataset_id}/geography.json"
-        response = requests.get(url, timeout=60)
+        response = requests.get(url, params=self._get_auth_params(), timeout=60)
         response.raise_for_status()
+        if self._looks_like_html(response):
+            raise RuntimeError(f"Nomis API returned HTML for {url}. Check authentication.")
         payload = response.json()
         return payload.get("geographies", [])
 
     def fetch_dataset_rows(self, dataset_id: str, params: dict) -> Iterable[dict]:
         url = f"{self.base_url}/dataset/{dataset_id}.csv"
-        base_params = dict(params)
-        if self.user:
-            base_params.setdefault("uid", self.user)
-        if self.api_key:
-            base_params.setdefault("apikey", self.api_key)
+        base_params = {**self._get_auth_params(), **params}
 
         response = requests.get(url, params=base_params, timeout=300)
         response.raise_for_status()
